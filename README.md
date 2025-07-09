@@ -2,91 +2,101 @@
 
 A Streamlit application for intelligent document processing using AI vision models and OCR.
 
-## Features
+---
 
-- 📄 **PDF Document Processing**: Upload and process PDF documents
-- 🤖 **AI Vision Analysis**: Uses Groq's vision models to understand document content
-- 🔍 **OCR Text Extraction**: Extracts text with confidence scoring
-- 📋 **Header Detection**: Automatically identifies document structure
-- 🏷️ **Metadata Extraction**: Extracts custom metadata fields
-- 💬 **Interactive Q&A**: Ask questions about the document with visual highlighting
-- 🎯 **Visual Answer Highlighting**: Highlights relevant text regions in the document
+## 🚀 Features
 
-## Installation
+- **PDF Document Processing**: Upload and process PDF files
+- **AI Vision Analysis**: Uses Groq's vision models for document understanding
+- **OCR Text Extraction**: Extracts text with confidence scoring and bounding boxes
+- **Header Detection**: Automatically identifies document structure and segments content
+- **Metadata Extraction**: Extracts custom metadata fields using AI
+- **Interactive Q&A**: Ask questions about the document with visual answer highlighting
+
+---
+
+## 🛠️ Installation
 
 ### Prerequisites
 
-- Python 3.8+
-- uv package manager
+- Python 3.10
+- [conda](https://docs.conda.io/en/latest/) (recommended)
 - Tesseract OCR
 - poppler-utils (for PDF processing)
 
 ### System Dependencies
 
-#### Ubuntu/Debian:
-```bash
+#### Ubuntu/Debian
+
+```sh
 sudo apt-get update
 sudo apt-get install tesseract-ocr poppler-utils
 ```
 
-#### Arch Linux/EndeavourOS:
-```bash
+#### Arch Linux/EndeavourOS
+
+```sh
 sudo pacman -S tesseract poppler
 ```
 
-#### macOS:
-```bash
+#### macOS
+
+```sh
 brew install tesseract poppler
 ```
 
-### Python Dependencies
+### Python Environment
 
-1. Clone or create the project directory:
-```bash
-mkdir document-processing-app
-cd document-processing-app
-```
+1. **Create a conda environment:**
 
-2. Initialize uv project:
-```bash
-uv init
-```
+   ```sh
+   conda create -p venv python=3.10 -y
+   conda activate ./venv
+   ```
 
-3. Install dependencies:
-```bash
-uv add streamlit opencv-python numpy pytesseract matplotlib pillow pdf2image fuzzywuzzy groq python-levenshtein
-```
+2. **Install Python dependencies:**
+   ```sh
+   pip install -r requirements.txt
+   ```
 
-## Configuration
+---
+
+## ⚙️ Configuration
 
 ### Groq API Key
 
-You'll need a Groq API key to use the vision and text models:
+- Sign up at [Groq Console](https://console.groq.com/) and create an API key.
+- Add your API key to a `.env` file as:
+  ```
+  GROQ_API_KEY="your_groq_api_key_here"
+  ```
+- The app will use this key automatically, or you can enter it in the sidebar.
 
-1. Sign up at [Groq Console](https://console.groq.com/)
-2. Create an API key
-3. Enter the API key in the Streamlit sidebar when running the app
+---
 
-## Usage
+## 🚦 Usage
 
 1. Start the Streamlit application:
-```bash
-uv run streamlit run app.py
-```
 
-2. Open your browser and navigate to `http://localhost:8501`
+   ```sh
+   streamlit run my_app.py
+   ```
 
-3. Enter your Groq API key in the sidebar
+2. Open your browser and go to [http://localhost:8501](http://localhost:8501)
+
+3. Enter your Groq API key in the sidebar (if not loaded from `.env`)
 
 4. Upload a PDF document
 
 5. Configure metadata fields to extract (optional)
 
-6. Process the document and explore the results
+6. Process the document and explore results
 
 7. Ask questions about the document in the Q&A section
 
-## Application Workflow
+---
+
+## 📝 Application Workflow
 
 1. **PDF to Image Conversion**: Converts the first page of the PDF to a high-resolution image
 2. **Image Preprocessing**: Applies adaptive thresholding for better OCR results
@@ -96,61 +106,53 @@ uv run streamlit run app.py
 6. **OCR Analysis**: Performs line-level OCR with confidence scoring
 7. **Interactive Q&A**: Allows users to ask questions with visual answer highlighting
 
-## Supported Document Types
+---
+
+## 📄 Supported Document Types
 
 - PDF files (first page processed)
 - Insurance documents
 - Forms and structured documents
 - Text-heavy documents
 
-## Default Metadata Fields
+---
+
+## 🏷️ Default Metadata Fields
 
 - Policy Number
 - Policy Start Date
 - Policy End Date
 - Policy Holder Name
 
-(These can be customized in the sidebar)
+(You can customize these in the sidebar)
 
-## Technical Details
+---
 
-### AI Models Used
+## ⚡ Technical Details
 
-- **Vision Model**: `meta-llama/llama-4-maverick-17b-128e-instruct` for document understanding
-- **Text Model**: `meta-llama/llama-4-maverick-17b-128e-instruct` for text processing and Q&A
+- **Main Application File**: `my_app.py`
+- **Vision Model**: `meta-llama/llama-4-scout-17b-16e-instruct` (via Groq API)
+- **OCR Engine**: Tesseract with adaptive thresholding
+- **Text Matching**: Fuzzy string matching (fuzzywuzzy)
+- **UI Framework**: Streamlit
 
-### OCR Configuration
+---
 
-- Uses Tesseract OCR with adaptive thresholding
-- Confidence threshold: 50%
-- Line-level text extraction with bounding boxes
+## 🛠️ Troubleshooting
 
-### Text Matching
+- **Tesseract not found**: Install `tesseract-ocr` system package
+- **PDF conversion fails**: Install `poppler-utils` system package
+- **API errors**: Check your Groq API key and internet connection
+- **Poor OCR results**: Try uploading a higher quality PDF
 
-- Uses fuzzy string matching (fuzzywuzzy)
-- Match threshold: 80% for answer highlighting
-- Token set ratio for flexible matching
+---
 
-## Troubleshooting
-
-### Common Issues
-
-1. **Tesseract not found**: Install tesseract-ocr system package
-2. **PDF conversion fails**: Install poppler-utils system package
-3. **API errors**: Check your Groq API key and internet connection
-4. **Poor OCR results**: Try uploading a higher quality PDF
-
-### Performance Tips
-
-- Use high-resolution PDFs for better OCR results
-- Ensure good contrast in source documents
-- The app processes only the first page of multi-page PDFs
-
-## License
+## 📜 License
 
 MIT License
 
-## Contributing
+---
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## 🤝 Contributing
 
+Contributions are welcome! Please submit a Pull Request or open

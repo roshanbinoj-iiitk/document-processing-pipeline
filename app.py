@@ -13,6 +13,9 @@ from groq import Groq
 import re
 import streamlit as st
 from datetime import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Streamlit page configuration
 st.set_page_config(
@@ -254,9 +257,13 @@ def main():
     st.sidebar.title("🔧 Configuration")
     
     # API Key input
+    default_groq_api_key = os.getenv("GROQ_API_KEY", "")  # <-- Add this line
+    
+    # API Key input
     groq_api_key = st.sidebar.text_input(
         "Groq API Key",
         type="password",
+        value=default_groq_api_key,  # <-- Add this line
         help="Enter your Groq API key to use the vision and text models"
     )
     

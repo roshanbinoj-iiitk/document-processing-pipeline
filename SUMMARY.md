@@ -1,119 +1,108 @@
 # Document Processing Pipeline - Project Summary
 
-## 🚀 Successfully Created Streamlit Application
+## 🚀 Overview
 
-### 📁 Project Structure
+The Document Processing Pipeline is a Streamlit application that leverages AI vision models and OCR to automate the extraction, structuring, and analysis of information from PDF documents. It is designed for insurance, forms, and other structured documents, providing a user-friendly interface for intelligent document understanding.
+
+---
+
+## 📁 Project Structure
+
 ```
-document-processing-app/
-├── app.py              # Main Streamlit application
-├── run.sh              # Startup script
-├── README.md           # Comprehensive documentation
-├── pyproject.toml      # uv project configuration
-├── uv.lock            # Dependency lock file
-└── .venv/             # Virtual environment
+document-processing-pipeline/
+├── myapp.py            # Main Streamlit application
+├── README.md           # Documentation and usage instructions
+├── requirements.txt    # Python dependencies
+├── .env                # Environment variables (Groq API key)
+├── venv/               # Conda or virtual environment
 ```
 
-### ✅ Installed Dependencies
-- **streamlit** - Web application framework
-- **opencv-python** - Computer vision library
-- **numpy** - Numerical computing
-- **pytesseract** - OCR engine wrapper
-- **matplotlib** - Plotting library
-- **pillow** - Image processing
-- **pdf2image** - PDF to image conversion
-- **fuzzywuzzy** - Fuzzy string matching
-- **groq** - Groq API client
-- **python-levenshtein** - String distance calculations
+---
 
-### ✅ System Dependencies
-- **tesseract** - OCR engine
-- **poppler** - PDF utilities
+## ✅ Key Features
 
-### 🎯 Key Features Implemented
+1. **PDF Upload & Conversion**
 
-1. **PDF Processing**
-   - Upload PDF files through Streamlit interface
-   - Convert PDF to high-resolution images
-   - Preprocess images for better OCR
+   - Upload PDF files via the Streamlit sidebar.
+   - Converts the first page of the PDF to a high-resolution image for processing.
 
-2. **AI Vision Analysis**
-   - Uses Groq's `meta-llama/llama-4-maverick-17b-128e-instruct` model
-   - Extracts text content from document images
-   - Provides detailed document descriptions
+2. **Image Preprocessing & OCR**
 
-3. **OCR Integration**
-   - Tesseract OCR with confidence scoring
-   - Line-level text extraction with bounding boxes
-   - Adaptive thresholding for improved accuracy
+   - Applies adaptive thresholding for optimal OCR results.
+   - Uses Tesseract OCR and Groq's vision model for robust text extraction.
+   - Extracts line-level text with bounding boxes and confidence scores.
+
+3. **AI Vision Analysis**
+
+   - Utilizes Groq's `meta-llama/llama-4-scout-17b-16e-instruct` model for multimodal document understanding.
+   - Detects headers, sections, and document structure using recursive LLM calls.
 
 4. **Header Detection & Segmentation**
-   - AI-powered header identification
-   - Document structure analysis
-   - Content segmentation by sections
+
+   - Automatically identifies main headers and subheaders.
+   - Segments document content into a nested, human-readable structure.
+   - Uses LLM to clean and prettify each segment for display.
 
 5. **Metadata Extraction**
-   - Configurable metadata fields
-   - JSON-structured output
-   - Default insurance document fields
+
+   - Extracts user-defined metadata fields (e.g., policy number, dates, holder name) using LLM.
+   - Outputs metadata as structured JSON.
 
 6. **Interactive Q&A**
-   - Natural language questions about documents
-   - Exact phrase matching from OCR text
-   - Visual highlighting of answers in document
 
-7. **Visual Answer Highlighting**
-   - Fuzzy string matching (80% threshold)
-   - Green rectangle highlighting on document
-   - Real-time answer visualization
+   - Users can ask natural language questions about the document.
+   - The app finds and highlights the exact answer phrase in the document image.
+   - Uses fuzzy string matching and visual highlighting for clarity.
 
-### 🛠️ How to Run
+7. **Advanced UI/UX**
+   - Clean, responsive Streamlit interface with progress indicators and error handling.
+   - Expandable sections for images, preprocessed views, and results.
+   - Visual document preview and statistics.
 
-1. **Quick Start:**
+---
+
+## 🛠️ How to Run
+
+1. **Create environment and install dependencies:**
+
    ```bash
-   ./run.sh
+   conda create -p venv python=3.10 -y
+   conda activate ./venv
+   pip install -r requirements.txt
    ```
 
-2. **Manual Start:**
+2. **Start the application:**
+
    ```bash
-   uv run streamlit run app.py
+   streamlit run my_app.py
    ```
 
-3. **Access Application:**
-   - Open browser to `http://localhost:8501`
-   - Enter Groq API key in sidebar
-   - Upload PDF and start processing
+3. **Access in browser:**  
+   Go to [http://localhost:8501](http://localhost:8501)
 
-### 🔑 Required Configuration
-- **Groq API Key**: Required for AI vision and text processing
-- **Metadata Fields**: Customizable in sidebar (defaults provided)
+4. **Usage Steps:**
+   - Enter your Groq API key in the sidebar (or set in `.env`)
+   - Upload a PDF document
+   - Optionally configure metadata fields
+   - Click buttons to detect headers, extract metadata, or ask questions
 
-### 📊 Application Flow
-1. User uploads PDF → 
-2. Convert to image → 
-3. Preprocess for OCR → 
-4. AI vision analysis → 
-5. Header detection → 
-6. Metadata extraction → 
-7. OCR analysis → 
-8. Interactive Q&A with highlighting
+---
 
-### 🎨 UI Features
-- Clean Streamlit interface
-- Expandable sections
-- Progress indicators
-- Error handling with user-friendly messages
-- Responsive layout with columns
-- Visual document preview
+## 🔑 Configuration
 
-### ✨ Successfully Transformed Original Code
-- Converted Google Colab code to Streamlit app
-- Replaced `files.upload()` with Streamlit file uploader
-- Replaced `userdata.get()` with Streamlit text input
-- Added proper error handling and user feedback
-- Maintained all original functionality
-- Added enhanced UI/UX features
+- **Groq API Key**: Required for AI vision and text processing (set in `.env` or sidebar)
+- **Metadata Fields**: Customizable in the sidebar (defaults provided)
 
-**Status: ✅ READY TO USE**
+---
 
-The application is fully functional and ready for document processing tasks!
+## 📊 Application Flow
 
+1. **Upload PDF** → 2. **Convert to Image** → 3. **Preprocess for OCR**
+2. **AI Vision Analysis** → 5. **Header Detection & Segmentation**
+3. **Metadata Extraction** → 7. **OCR Analysis** → 8. **Interactive Q&A**
+
+---
+
+## ✨ Summary
+
+This pipeline transforms complex, unstructured documents into structured, searchable, and interactive data. It combines the power of modern LLMs, OCR, and a user-friendly Streamlit interface to automate document understanding and information extraction, making it ideal for insurance, finance, and enterprise document workflows.
