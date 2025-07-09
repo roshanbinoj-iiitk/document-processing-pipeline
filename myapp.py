@@ -388,7 +388,6 @@ def main():
         value=default_groq_api_key,
         help="Enter your Groq API key to use the vision and text models"
     )
-    st.sidebar.markdown(default_groq_api_key, unsafe_allow_html=True)
     st.sidebar.subheader("📤 Upload Document")
     uploaded_file = st.sidebar.file_uploader(
         "Choose a PDF file",
