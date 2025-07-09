@@ -378,7 +378,10 @@ def ask_question_about_document(text, pil_image, line_boxes, question, groq_api_
 def main():
     st.markdown('<h1 class="main-header">📄 Document Processing Pipeline</h1>', unsafe_allow_html=True)
     st.sidebar.title("🔧 Configuration")
-    default_groq_api_key = os.getenv("GROQ_API_KEY", "")
+    default_groq_api_key = (
+        st.secrets.get("GROQ_API_KEY", "") if hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets
+        else os.getenv("GROQ_API_KEY", "")
+    )
     groq_api_key = st.sidebar.text_input(
         "Groq API Key",
         type="password",
