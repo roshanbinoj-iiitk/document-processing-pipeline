@@ -174,7 +174,7 @@ def multimodal_object_detection(base64_image, groq_api_key):
         completion = client.chat.completions.create(
             model="meta-llama/llama-4-scout-17b-16e-instruct",
             messages=messages,
-            max_tokens=2048,
+        
         )
         response = completion.choices[0].message.content
         # Try to extract JSON list
@@ -227,7 +227,7 @@ def get_line_level_boxes(pil_image, base64_image, groq_api_key):
     return line_boxes
 
 # --- LLM Utilities ---
-def ask_llm(prompt, groq_api_key, max_tokens=512):
+def ask_llm(prompt, groq_api_key):
     """Ask LLM a question"""
     if not groq_api_key:
         st.error("Error: Groq API key not found.")
@@ -240,7 +240,6 @@ def ask_llm(prompt, groq_api_key, max_tokens=512):
         completion = client.chat.completions.create(
             model="meta-llama/llama-4-scout-17b-16e-instruct",
             messages=messages,
-            max_tokens=max_tokens,
         )
         return completion.choices[0].message.content
     except Exception as e:
@@ -256,7 +255,7 @@ def detect_headers_recursive(full_text, groq_api_key, depth=0):
         "with a list of nested headers. Only output JSON.\n\n"
         f"Text:\n{full_text}"
     )
-    response = ask_llm(prompt, groq_api_key, max_tokens=2048)
+    response = ask_llm(prompt, groq_api_key)
     if not response:
         return {}
     try:
@@ -323,7 +322,7 @@ def extract_metadata(full_text, metadata_fields, groq_api_key):
         "If a field is not found, set its value to null. Only output JSON.\n\n"
         f"Text:\n{full_text}"
     )
-    llm_response = ask_llm(prompt, groq_api_key, max_tokens=512)
+    llm_response = ask_llm(prompt, groq_api_key)
     if not llm_response:
         return {field: None for field in metadata_fields}
     try:
@@ -368,7 +367,7 @@ def ask_question_about_document(text, pil_image, line_boxes, question, groq_api_
         f"Now answer this question: \"{question}\"\n\n"
         "Return only the **exact phrase** from the OCR text that answers the question. Do not paraphrase or explain."
     )
-    answer = ask_llm(prompt, groq_api_key, max_tokens=256)
+    answer = ask_llm(prompt, groq_api_key)
     if answer:
         highlighted_image = highlight_best_match(pil_image, line_boxes, answer)
         return answer, highlighted_image
@@ -488,10 +487,12 @@ def main():
             st.subheader("📋 Header Structure")
             # Pretty display of header hierarchy
             def render_headers(headers, level=0):
+                if not isinstance(headers, dict):
+                    return
                 for header, content in headers.items():
                     indent = "&nbsp;" * (level * 6)
                     st.markdown(
-                        f"{indent}<span style='font-size:{1.4 - 0.15*level}rem; color:#1f77b4; font-weight:bold;'>{header}</span>",
+                        f"{indent}<span style='font-size:{max(0.8, 1.4 - 0.15*level)}rem; color:#1f77b4; font-weight:bold;'>{header}</span>",
                         unsafe_allow_html=True
                     )
                     if isinstance(content, dict) and "subsections" in content:
@@ -509,7 +510,7 @@ def main():
                     f"Section Title: {header}\n\nSection Content:\n{text}\n\n"
                     "Return only the formatted section."
                 )
-                response = ask_llm(prompt, groq_api_key, max_tokens=1024)
+                response = ask_llm(prompt, groq_api_key)
                 return response if response else text
 
             document_segments = segment_document_by_headers(description, header_structure)
