@@ -278,28 +278,37 @@ def segment_document_by_headers(full_text, header_structure):
     def assign_lines(headers, lines, start_idx=0):
         segments = {}
         idx = start_idx
-        for header, content in headers.items():
-            section = {"text": [], "subsections": {}}
-            # If content has subsections, recurse
-            if isinstance(content, dict) and "subsections" in content:
-                # Find where this header starts in lines
-                while idx < len(lines) and header.strip().lower() not in lines[idx].strip().lower():
-                    idx += 1
+        if not isinstance(headers, dict):
+            return segments, idx
+        header_names = list(headers.keys())
+        while idx < len(lines):
+            line = lines[idx].strip()
+            # Find the next header in the lines
+            matched_header = None
+            for header in header_names:
+                if header.strip().lower() in line.lower():
+                    matched_header = header
+                    break
+            if matched_header:
+                section = {"text": [], "subsections": {}}
                 idx += 1  # skip header line
-                # Recursively assign lines to subsections
-                section["subsections"], idx = assign_lines(content["subsections"], lines, idx)
-            else:
+                content = headers[matched_header]
+                # If content has subsections, recurse
+                if isinstance(content, dict) and "subsections" in content and isinstance(content["subsections"], dict):
+                    section["subsections"], idx = assign_lines(content["subsections"], lines, idx)
                 # Collect lines until next header or end
                 section_lines = []
                 while idx < len(lines):
-                    line = lines[idx].strip()
+                    next_line = lines[idx].strip()
                     # Stop if line matches any header at this level
-                    if any(h.lower() in line.lower() for h in headers if h != header):
+                    if any(h.strip().lower() in next_line.lower() for h in header_names if h != matched_header):
                         break
-                    section_lines.append(line)
+                    section_lines.append(next_line)
                     idx += 1
                 section["text"] = section_lines
-            segments[header] = section
+                segments[matched_header] = section
+            else:
+                idx += 1  # skip lines that don't match any header
         return segments, idx
 
     segments, _ = assign_lines(header_structure, lines)
